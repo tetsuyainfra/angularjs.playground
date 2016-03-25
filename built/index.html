@@ -1,9 +1,28 @@
-
-<html></html>
-<head>
-  <title>test</title>
-</head>
-<body>
-  <div id="content"></div>
-  <script src="./app.js" type="text/javascript"></script>
-</body>
+<!DOCTYPE html>
+<html ng-app="myApp">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>test</title>
+  </head>
+  <body ng-controller="MainCtrl as ctrl" layout-fill layout="row"> 
+    <div flex layout="column" class="left-pane"> 
+      <div flex="10">
+        <div class="tool"> a b c</div>
+      </div>
+      <md-content flex layout="row">
+        <md-content flex>
+          <ul ng-repeat=" n in childs track by $index" class="list animate-repeat">
+            <li ng-click="ctrl.cout(n.no)">{{::n.no}}</li>
+          </ul>
+        </md-content>
+      </md-content>
+    </div>
+    <div flex class="right-pane">
+      <md-button ng-click="ctrl.addChild(500)" class="md-raised">AddChild 500</md-button>
+      <md-button ng-click="ctrl.addChild(1000)" class="md-raised">AddChild 1000</md-button>
+      <md-button ng-click="ctrl.addChild(2000)" class="md-raised">AddChild 2000</md-button>
+    </div>
+    <script src="./app.js" type="text/javascript"></script>
+  </body>
+</html>

@@ -1,8 +1,11 @@
-env          = require('./env')
-autoprefixer = require('autoprefixer')
-precss       = require('precss')
+webpack           = require('webpack')
+BrowserSyncPlugin = require('browser-sync-webpack-plugin')
+autoprefixer      = require('autoprefixer')
+precss            = require('precss')
 
-webpack = {
+env          = require('./env')
+
+webpackConfig = {
   #context: __dirname + "/app",
   entry:
     app: './src/app.coffee'
@@ -10,9 +13,24 @@ webpack = {
   output:
     filename: '[name].js'
     path: __dirname + '/built'
-  resolve: {
+
+  resolve:
     extensions: ['', '.js', '.coffee']
-  }
+
+  plugins: [
+    # new webpack.ProvidePlugin({
+    #   "window.angular" : "angular"
+    # })
+    new BrowserSyncPlugin({
+      host: 'localhost'
+      port: 3000
+      server:
+        baseDir: 'built'
+    })
+  ]
+
+  debug: true
+  devtool: '#source-map'
 
   module:
     loaders: [
@@ -23,7 +41,8 @@ webpack = {
       }
       {
         test: /\.jade$/
-        loader: 'jade'
+        #loader: 'jade?pretty=true'
+        loader: "html!jade-html"
       }
       {
         test: /\.html$/
@@ -35,7 +54,7 @@ webpack = {
       }
       {
         test:     /\.scss$/
-        loader:   "style!css!postcss!sass"
+        loaders:   ["style", "css", "postcss", "sass"]
       }
       {
         test: /\.jpg$/
@@ -50,17 +69,19 @@ webpack = {
   htmlLoader:
     minimize: false
     ignoreCustomFragments: [/\{\{.*?}}/]
+
   jadeLoader:
     pretty: true,
+
+  # postcss-loader plugin config
   postcss: () ->
     [autoprefixer, precss]
 
 }
 
 if env.isProduction
-  _webpack = require('webpack')
-  webpack.plugins.push(
-      new _webpack.optimize.UglifyJsPlugin()
+  webpackConfig.plugins.push(
+      new webpack.optimize.UglifyJsPlugin()
   )
 
-module.exports = webpack
+module.exports = webpackConfig

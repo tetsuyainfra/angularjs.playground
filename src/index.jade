@@ -1,6 +1,21 @@
-html
-head
-  title test
-body
-  div#content
-  script(src="./app.js", type="text/javascript")
+doctype html
+html(ng-app="myApp")
+  head
+    meta(charset="utf-8")
+    meta(name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no")
+    title test
+  body(ng-controller="MainCtrl as ctrl" layout-fill layout="row") 
+    .left-pane(flex layout="column") 
+      div(flex="10")
+        div.tool  a b c
+      md-content(flex layout="row")
+        md-content(flex)
+          ul.list.animate-repeat(ng-repeat=" n in childs track by $index")
+            li(ng-click="ctrl.cout(n.no)") {{::n.no}}
+          
+    .right-pane(flex)
+      md-button.md-raised(ng-click="ctrl.addChild(500)") AddChild 500
+      md-button.md-raised(ng-click="ctrl.addChild(1000)") AddChild 1000
+      md-button.md-raised(ng-click="ctrl.addChild(2000)") AddChild 2000
+          
+    script(src="./app.js", type="text/javascript")
